@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonInput, IonItem, IonList, IonButton, IonText, IonSegment, IonLabel, IonSegmentButton} from '@ionic/angular/standalone';
+import { Producto } from '../../models/producto';
+
 
 @Component({
   selector: 'app-nuevo-producto',
@@ -39,10 +41,11 @@ export class NuevoProducto{
   botonGuardar(){
     this.obtenerProductos();
     this.guardarProductos();
+    this.limpiarInputs();
     
   }
 
-  botonCancelar(){
+  limpiarInputs(){
     this.nuevoProducto.tipo = '';
     this.nuevoProducto.color = '';
     this.nuevoProducto.talla = '';
@@ -81,19 +84,5 @@ export class NuevoProducto{
 
 }
 
-export class Producto {
-  tipo: string;
-  color: string;
-  talla: string;
-  cantidad: number;
-  modelo: string;
 
-constructor(tipo: string, color: string, talla: string, cantidad:number, modelo: string) {
-    this.tipo = tipo;
-    this.color = color;
-    this.talla = talla;
-    this.cantidad = cantidad;
-    this.modelo = modelo;
-  }
-}
 

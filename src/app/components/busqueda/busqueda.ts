@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { IonItem, IonList, IonSearchbar } from '@ionic/angular/standalone';
-import { Producto } from '../producto/producto';
-import { CommonModule } from '@angular/common';
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem, IonList, IonSearchbar } from '@ionic/angular/standalone';
+import { Producto } from '../../models/producto';
+import { RouterLink } from '@angular/router';
+import { ComunicarDatos } from '../../services/comunicar-datos';
+
 
 @Component({
   selector: 'app-busqueda',
-  imports: [IonSearchbar, IonItem, IonList, CommonModule],
+  imports: [IonSearchbar, IonItem, IonList,IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, RouterLink ],
   templateUrl: './busqueda.html',
   styleUrl: './busqueda.css',
 })
@@ -15,14 +17,16 @@ export class Busqueda implements OnInit {
     this.elegirArray();
   }
 
-  constructor(){
+  constructor(public servicio_comunicar_datos: ComunicarDatos){
     
     this.productosFiltrados = [...this.arrayProductos];
   }
 
   valorBotonHome = localStorage.getItem('valorBotonHome');
   arrayProductos: Producto[] = [];
-  productosFiltrados: Producto[] = []
+  productosFiltrados: Producto[] = [];
+  productoActual: Producto = new Producto();
+ 
 
   elegirArray (){
     let productosAlmacenados;
@@ -57,22 +61,30 @@ export class Busqueda implements OnInit {
 
   buscarPorTipo(palabraBusqueda: string){
        this.productosFiltrados = this.arrayProductos.filter(p =>
-      p['tipo'].toLowerCase().includes(palabraBusqueda)
+      p.tipo.toLowerCase().includes(palabraBusqueda)
     );
       //Esto lo añado si quiero que a la búsqueda se una el color
       //||
       //p['color'].toLowerCase().includes(palabraBusqueda)
-
-      
-    //He tenido que acceder a cada propiedad con strings porque si no, me da un error que indica que producto no tiene ni tipo ni color.
-    //No lo entiendo, porque sí que los tiene, quizás haya algún problema al almacenar el array
   }
 
   buscarPorModelo(palabraBusqueda: string){
     this.productosFiltrados = this.arrayProductos.filter(p =>
-      p['modelo'].toLowerCase().includes(palabraBusqueda)
+      p.modelo.toLowerCase().includes(palabraBusqueda)
     )
 
   }
+
+  //de alguna manera tengo que recoger el producto que se clica, para comunicarlo a través del servicio
+  //al componente ficha-producto
+    comunicarDatos(tipo:string, color:string, talla:string, cantidad:number, modelo:string){
+        this.productoActual.tipo = tipo;
+        this.productoActual.color = color;
+        this.productoActual.talla = talla;
+        this.productoActual.cantidad = cantidad;
+        this.productoActual.modelo = modelo;
+        this.servicio_comunicar_datos.productoActual = this.productoActual;
+        
+    }
 
 }

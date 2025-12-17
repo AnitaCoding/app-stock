@@ -25,18 +25,16 @@
       <ion-input label="Talla" placeholder="Talla" [(ngModel)]="nuevoProducto.talla"></ion-input>
     </ion-item>
 
+    @if (opcionSeleccionada==='fabricado'){
+    <ion-item>
+        <ion-input label="Modelo" placeholder="Modelo" [(ngModel)]="nuevoProducto.modelo"></ion-input>
+    </ion-item>        
+    }
+
     <ion-item>
       <ion-input label="Cantidad" type="number" placeholder="0" [(ngModel)]="nuevoProducto.cantidad"></ion-input>
     </ion-item>
-
-    @if (opcionSeleccionada==='fabricado'){
-        <ion-item>
-            <ion-input label="Modelo" placeholder="Modelo" [(ngModel)]="nuevoProducto.modelo"></ion-input>
-        </ion-item>        
-    }
-    
-
   </ion-list>
 </ion-list>
 <ion-button (click)="botonGuardar()">Guardar</ion-button>
-<ion-button (click)="botonCancelar()">Cancelar</ion-button>
+<ion-button (click)="limpiarInputs()">Cancelar</ion-button>

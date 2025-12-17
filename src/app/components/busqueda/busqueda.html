@@ -1,15 +1,21 @@
 <ion-searchbar placeholder="Buscar producto" (ionInput)="buscarProductos($event)"></ion-searchbar>
 <ion-list>
 
-    @for (producto of productosFiltrados; track producto){
-    <ion-item>
-        <h2>{{ producto['tipo'] }}</h2>
-        <p>{{ producto['color'] }}</p>
-        <p>{{ producto['modelo'] }}</p>
-    </ion-item>
+    @for (p of productosFiltrados; track p){
+
+        <ion-card [routerLink]="['/ficha-producto']" (click)="comunicarDatos(p.tipo, p.color, p.talla, p.cantidad, p.modelo)">
+            <ion-card-header>
+                <ion-card-title>{{ p.tipo }}</ion-card-title>
+                <ion-card-subtitle></ion-card-subtitle>
+            </ion-card-header>
+
+            <ion-card-content>
+                <p>{{ p.modelo }}</p>
+                <p>{{ p.color }}</p>
+            </ion-card-content>
+        </ion-card>
+
+
     }
 
 </ion-list>
-
-    <!--Aquí habria que hacer un ngfor para que cogiese todos los artículos de la bbdd
-    y los colocase uno a uno en un botón, en vez de escribirlos todos-->
