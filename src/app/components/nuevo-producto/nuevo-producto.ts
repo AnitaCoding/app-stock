@@ -26,7 +26,8 @@ export class NuevoProducto{
     tipo: '',
     color: '',
     talla: '',
-    cantidad: 0
+    cantidad: 0,
+    modelo: ''
   }
 
   //Añadir producto al array de productos que corresponda
@@ -41,10 +42,18 @@ export class NuevoProducto{
     
   }
 
+  botonCancelar(){
+    this.nuevoProducto.tipo = '';
+    this.nuevoProducto.color = '';
+    this.nuevoProducto.talla = '';
+    this.nuevoProducto.cantidad = 0;
+    this.nuevoProducto.modelo = '';
+  }
+
   guardarProductos(){
 
     this.arrayProductos.push(this.nuevoProducto);
-    
+
     if (this.opcionSeleccionada === 'virgen'){
       localStorage.setItem('productosVirgenes', JSON.stringify(this.arrayProductos));
     }else{
@@ -57,7 +66,7 @@ export class NuevoProducto{
     let productosAlmacenados;
 
     //Se utiliza el operador nullish ?? en lugar de hacer un if que chequee si existe el array 
-    // //en el localstorage, si no existe, lo crea
+    //en el localstorage, si no existe, lo crea
 
     if(this.opcionSeleccionada === 'virgen'){
       productosAlmacenados = localStorage.getItem('productosVirgenes') ?? '[]';
@@ -66,13 +75,9 @@ export class NuevoProducto{
     }
 
     this.arrayProductos = JSON.parse(productosAlmacenados);
-    console.log(this.arrayProductos[0]);
 
+  } 
 
-  }
-
-  //Crear objeto producto y almacenar en el array que corresponda
-  
 
 }
 
@@ -81,12 +86,14 @@ export class Producto {
   color: string;
   talla: string;
   cantidad: number;
+  modelo: string;
 
-  constructor(tipo: string, color: string, talla: string, cantidad:number) {
+constructor(tipo: string, color: string, talla: string, cantidad:number, modelo: string) {
     this.tipo = tipo;
     this.color = color;
     this.talla = talla;
     this.cantidad = cantidad;
+    this.modelo = modelo;
   }
 }
 

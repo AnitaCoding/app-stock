@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { IonFooter, IonIcon, IonToolbar, IonButton, IonButtons} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
-import { create, ellipsisHorizontal, ellipsisVertical, helpCircle, personCircle, search, star, heart, statsChart } from 'ionicons/icons';
+import { personCircle, search, statsChart, home } from 'ionicons/icons';
 @Component({
   selector: 'app-nav-bar',
-  imports: [IonFooter, IonToolbar, IonIcon, IonButton, IonButtons],
+  imports: [IonFooter, IonToolbar, IonIcon, IonButton, IonButtons, RouterLink],
   templateUrl: './nav-bar.html',
   styleUrl: './nav-bar.css',
 })
@@ -16,13 +17,7 @@ export class NavBar {
      * can be registered in app.component.ts and then
      * referenced by name anywhere in your application.
      */
-    addIcons({ create, ellipsisHorizontal, ellipsisVertical, helpCircle, personCircle, search, star, heart, statsChart});
-  }
-
-    mensaje: string = '¡Hola desde el componente!';
-
-  mostrarMensaje() {
-    console.log(this.mensaje);
+    addIcons({ personCircle, search, statsChart, home});
   }
 
 }

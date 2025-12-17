@@ -31,7 +31,7 @@
 
     @if (opcionSeleccionada==='fabricado'){
         <ion-item>
-            <ion-input label="Modelo" type="number" placeholder="0"></ion-input>
+            <ion-input label="Modelo" placeholder="Modelo" [(ngModel)]="nuevoProducto.modelo"></ion-input>
         </ion-item>        
     }
     
@@ -39,4 +39,4 @@
   </ion-list>
 </ion-list>
 <ion-button (click)="botonGuardar()">Guardar</ion-button>
-<ion-button>Cancelar</ion-button>
+<ion-button (click)="botonCancelar()">Cancelar</ion-button>
