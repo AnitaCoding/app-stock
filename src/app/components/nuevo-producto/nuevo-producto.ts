@@ -25,6 +25,7 @@ export class NuevoProducto{
 
 
   nuevoProducto: Producto = {
+    id: 0,
     tipo: '',
     color: '',
     talla: '',
@@ -56,6 +57,8 @@ export class NuevoProducto{
   guardarProductos(){
 
     this.arrayProductos.push(this.nuevoProducto);
+    this.crearIdProducto();
+    console.log(this.nuevoProducto.id);
 
     if (this.opcionSeleccionada === 'virgen'){
       localStorage.setItem('productosVirgenes', JSON.stringify(this.arrayProductos));
@@ -63,6 +66,12 @@ export class NuevoProducto{
       localStorage.setItem('productosFabricados', JSON.stringify(this.arrayProductos));
     }
 
+  }
+
+  //creo un id de producto para que sea más fácil buscarlo en el array que corresponda
+  crearIdProducto(){
+    this.nuevoProducto.id = this.arrayProductos.length;
+    
   }
 
   obtenerProductos(){

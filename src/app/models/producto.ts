@@ -1,4 +1,5 @@
 export class Producto {
+  id: number;
   tipo: string;
   color: string;
   talla: string;
@@ -6,6 +7,7 @@ export class Producto {
   modelo: string;
 
 constructor() {
+    this.id = 0;
     this.tipo = '';
     this.color = '';
     this.talla = '';

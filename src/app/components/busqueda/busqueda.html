@@ -3,7 +3,7 @@
 
     @for (p of productosFiltrados; track p){
 
-        <ion-card [routerLink]="['/ficha-producto']" (click)="comunicarDatos(p.tipo, p.color, p.talla, p.cantidad, p.modelo)">
+        <ion-card [routerLink]="['/ficha-producto']" (click)="comunicarDatos(p.id, p.tipo, p.color, p.talla, p.cantidad, p.modelo)">
             <ion-card-header>
                 <ion-card-title>{{ p.tipo }}</ion-card-title>
                 <ion-card-subtitle></ion-card-subtitle>
@@ -14,8 +14,7 @@
                 <p>{{ p.color }}</p>
             </ion-card-content>
         </ion-card>
-
-
+        
     }
 
 </ion-list>
