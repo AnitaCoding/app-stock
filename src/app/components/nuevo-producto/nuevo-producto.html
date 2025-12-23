@@ -1,0 +1,40 @@
+<ion-text color="primary">
+  <h1>Nuevo producto</h1>
+</ion-text>
+
+<ion-segment [(ngModel)]="opcionSeleccionada">
+  <ion-segment-button value="virgen">
+    <ion-label>Virgen</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="fabricado">
+    <ion-label>Fabricado</ion-label>
+  </ion-segment-button>
+</ion-segment>
+
+<ion-list>
+  <ion-list>
+    <ion-item>
+      <ion-input label="Tipo de producto" placeholder="Tipo de producto" [(ngModel)]="nuevoProducto.tipo"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input label="Color" placeholder="Color" [(ngModel)]="nuevoProducto.color"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input label="Talla" placeholder="Talla" [(ngModel)]="nuevoProducto.talla"></ion-input>
+    </ion-item>
+
+    @if (opcionSeleccionada==='fabricado'){
+    <ion-item>
+        <ion-input label="Modelo" placeholder="Modelo" [(ngModel)]="nuevoProducto.modelo"></ion-input>
+    </ion-item>        
+    }
+
+    <ion-item>
+      <ion-input label="Cantidad" type="number" placeholder="0" [(ngModel)]="nuevoProducto.cantidad"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-list>
+<ion-button (click)="botonGuardar()">Guardar</ion-button>
+<ion-button (click)="limpiarInputs()">Cancelar</ion-button>
