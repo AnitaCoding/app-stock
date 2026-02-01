@@ -21,6 +21,9 @@ export class FichaProducto {
 
    }
 
+   //este código se repite en varios componentes, valorar gestionarlo con un servicio
+    valorBotonHome = localStorage.getItem('valorBotonHome');
+
    //Para guardar cambio, primero buscamos por id el producto en el array que sea
    //Para saber en qué array hay que buscar, habrá que comunicarlo con un servicio
    //Al comunicar el array, podemos usarlo también para cuando el usuario le de a salir o cancelar
@@ -54,8 +57,5 @@ export class FichaProducto {
     guardarCambios(){
       this.modificarProductoPorId();
    }
-
-
-      
 
 }
