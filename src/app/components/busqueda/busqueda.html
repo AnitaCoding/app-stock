@@ -2,49 +2,63 @@
 <ion-searchbar [(ngModel)]="terminoBusqueda" placeholder="Buscar producto" (ionInput)="buscarProductos()"></ion-searchbar>
 
 <!--Si el término de búsqueda está vacío, muestra lista de categorías independientemente de la acción-->
-@if(!terminoBusqueda){
+@if(!terminoBusqueda && categoriaElegida===null){
 <ion-list>
-<!--WARNING
-Si pinchamos en un card de categoría, hay que limpiar lo que enseña, es decir:
-
-Si estamos en vender/fabricar, y pinchamos en camiseta, el siguiente estado será que nos muestre el componente búsqueda, pero con los modelos
-Si estamos en comprar y pinchamos en camisetas, el siguiente estado serán los colores
-
-y así sucesivamente...
-
-Eso o en la ficha de producto poder seleccionar color y talla
-
-pero en vender y fabricar, al menos, sí voy a tener que mostrar al menos los modelos
-
-parece ser que lo voy a controlar con click, quizás llamo a "listaCards", y desde esa función, lee algo que haya podido guardar
-en el localstorage por ejemplo, si no lo guarda el componente, que supongo que sí, y según el valor que tenga, mostrará una u otra lista.
--->
-    @for (p of listaCategorias; track p){
-        <ion-card [routerLink]="['/ficha-producto']" >
-        
+    @for (p of listaPropiedades; track p){
+        <ion-card (click)="buscarModelos(p)">      
             <ion-card-header>
                 <ion-card-title>{{ p }}</ion-card-title>
-                <ion-card-subtitle></ion-card-subtitle>
             </ion-card-header>
-
-        </ion-card>
-        
+        </ion-card>    
     }
+</ion-list>
+}
 
+@if(!terminoBusqueda && categoriaElegida!=null && modeloElegido == null){
+<ion-list>
+    @for (p of listaPropiedades; track p){
+        <ion-card (click)="buscarColores(p)">       
+            <ion-card-header>
+                <ion-card-title>{{ p }}</ion-card-title>
+            </ion-card-header>
+        </ion-card>       
+    }
+</ion-list>
+}
+
+@if(!terminoBusqueda && modeloElegido!=null && colorElegido == null){
+<ion-list>
+    @for (p of listaPropiedades; track p){
+        <ion-card (click)="buscarTallas(p)">       
+            <ion-card-header>
+                <ion-card-title>{{ p }}</ion-card-title>
+            </ion-card-header>
+        </ion-card>       
+    }
+</ion-list>
+}
+
+@if(!terminoBusqueda && colorElegido!=null){
+<ion-list>
+    @for (p of listaPropiedades; track p){
+        <ion-card [routerLink]="['/ficha-producto']" (click)="comunicarDatos(productosFiltrados[0].id, productosFiltrados[0].tipo, productosFiltrados[0].color, productosFiltrados[0].talla, productosFiltrados[0].cantidad, productosFiltrados[0].modelo)
+">       
+            <ion-card-header>
+                <ion-card-title>{{ p }}</ion-card-title>
+            </ion-card-header>
+        </ion-card>       
+    }
 </ion-list>
 }
 
 <!--Si el término de búsqueda tiene cualquier cosa, busca en el array de productos filtrados-->
 @if(terminoBusqueda){
-
 <ion-list>
-
     @for (p of productosFiltrados; track p){
-            <ion-card [routerLink]="['/ficha-producto']" (click)="comunicarDatos(p.id, p.tipo, p.color, p.talla, p.cantidad, p.modelo)">
-        
+        <ion-card [routerLink]="['/ficha-producto']" (click)="comunicarDatos(p.id, p.tipo, p.color, p.talla, p.cantidad, p.modelo)">
             <ion-card-header>
                 <ion-card-title>{{ p.tipo }}</ion-card-title>
-                <ion-card-subtitle></ion-card-subtitle>
+                <ion-card-subtitle>{{ p.modelo }}</ion-card-subtitle>
             </ion-card-header>
 
         <!--Si entramos en vender o fabricar, nos muestra también el modelo y el color-->
@@ -52,16 +66,12 @@ en el localstorage por ejemplo, si no lo guarda el componente, que supongo que s
             @if(valorBotonHome === 'vender' || valorBotonHome === 'fabricar'){
             
             <ion-card-content>
-                <p>{{ p.modelo }}</p>
-                <p>{{ p.color }}</p>
+                <p></p>
+                @if (p.color){<p>Color: {{ p.color }}</p>}
+                @if (p.talla){<p>Talla: {{ p.talla }}</p>}
             </ion-card-content>
-
             }
-
-        </ion-card>
-        
+        </ion-card>       
     }
-
 </ion-list>
-
 }
