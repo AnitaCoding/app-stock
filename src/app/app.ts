@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NavBar } from "./components/nav-bar/nav-bar";
-import { IonHeader, IonTitle, IonIcon, IonBadge, IonTabBar, IonToolbar, IonContent, IonFooter, IonRouterOutlet } from "@ionic/angular/standalone";
+import { IonHeader, IonTitle, IonIcon, IonBadge, IonTabBar, IonToolbar, IonFooter, IonRouterOutlet, IonApp } from "@ionic/angular/standalone";
 import { HttpClient } from '@angular/common/http';
 import { addIcons } from 'ionicons';
 import { notifications} from 'ionicons/icons';
@@ -11,7 +11,7 @@ import { Producto } from './models/producto';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavBar, IonHeader, IonTitle, IonIcon, RouterLink, IonBadge, IonTabBar, IonToolbar, IonContent, IonFooter, IonRouterOutlet],
+  imports: [NavBar, IonHeader, IonTitle, IonIcon, RouterLink, IonBadge, IonTabBar, IonToolbar, IonFooter, IonRouterOutlet, IonApp],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

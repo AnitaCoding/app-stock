@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonInput, IonItem, IonList, IonButton, IonText, IonSegment, IonLabel, IonSegmentButton, IonContent} from '@ionic/angular/standalone';
+import { IonInput, IonItem, IonList, IonButton, IonText, IonSegment, IonLabel, IonSegmentButton, IonContent, ToastController, AlertController} from '@ionic/angular/standalone';
 import { Producto } from '../../models/producto';
 
 
@@ -14,6 +14,7 @@ import { Producto } from '../../models/producto';
 })
 
 export class NuevoProducto{
+  constructor(private toastController: ToastController, private alertCtrl:AlertController){}
 
 
   opcionSeleccionada: string = 'virgen';
@@ -39,11 +40,16 @@ export class NuevoProducto{
     
   }
 
-  botonGuardar(){
+  botonGuardar(c:string){
     this.obtenerProductos();
-    this.guardarProductos();
+    this.guardarProductos(c);
     this.limpiarInputs();
     
+  }
+
+  botonCancelar(c:string){
+    this.limpiarInputs();
+    this.mostrarToast('middle', c)
   }
 
   limpiarInputs(){
@@ -54,23 +60,26 @@ export class NuevoProducto{
     this.nuevoProducto.modelo = '';
   }
 
-  guardarProductos(){
-
-    this.arrayProductos.push(this.nuevoProducto);
-    this.crearIdProducto();
-
-    if (this.opcionSeleccionada === 'virgen'){
-      localStorage.setItem('productosVirgenes', JSON.stringify(this.arrayProductos));
+  guardarProductos(c:string){
+    if(this.opcionSeleccionada === 'fabricado' && this.nuevoProducto.modelo === ''){
+      this.mostrarAlerta();
     }else{
-      localStorage.setItem('productosFabricados', JSON.stringify(this.arrayProductos));
-    }
+      this.arrayProductos.push(this.nuevoProducto);
+      this.crearIdProducto();
 
+      if (this.opcionSeleccionada === 'virgen'){
+        localStorage.setItem('productosVirgenes', JSON.stringify(this.arrayProductos));
+      }else{
+        localStorage.setItem('productosFabricados', JSON.stringify(this.arrayProductos));
+      }
+      this.mostrarToast('middle', c)
+    }
+    
   }
 
   //creo un id de producto para que sea más fácil buscarlo en el array que corresponda
   crearIdProducto(){
-    this.nuevoProducto.id = this.arrayProductos.length;
-    
+    this.nuevoProducto.id = this.arrayProductos.length;   
   }
 
   obtenerProductos(){
@@ -87,9 +96,34 @@ export class NuevoProducto{
 
     this.arrayProductos = JSON.parse(productosAlmacenados);
 
-  } 
+  }
 
+  async mostrarToast(position: "top" | "bottom" | "middle" | undefined, c:string){
+    let mensaje= '';
+    if(c === 'guardar'){
+      mensaje = 'Producto añadido'
+    }else{
+      mensaje = 'Acción cancelada'
+    }
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 1500,
+      position: position,
+    });
 
+    await toast.present();
+  }
+
+  async mostrarAlerta() {
+    const mensajeVender = 'No se puede almacenar un producto fabricado sin indicar el modelo'
+      const alert = await this.alertCtrl.create({
+        header: 'Error',
+        message: mensajeVender,
+        buttons: ['Ok'],
+      });
+
+    await alert.present();
+  }
 }
 
 

@@ -1,0 +1,10 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 4rem 0.5rem;
+}
+
+ion-button{
+    flex:1
+}

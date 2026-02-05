@@ -4,6 +4,7 @@ import { ComunicarDatos } from '../../services/comunicar-datos';
 import { Producto } from '../../models/producto';
 import { ComunicarArrayProductos } from '../../services/comunicar-array-productos';
 import { FormsModule } from '@angular/forms';
+import { trash } from 'ionicons/icons';
 //import { AlertController, ToastController } from '@ionic/angular';
 
 @Component({
@@ -68,7 +69,6 @@ export class FichaProducto {
 
    seleccionarArray(){
     this.arrayActual = JSON.parse(localStorage.getItem(this.servicio_comunicar_nombre_array.nombreArrayProductos)!);
-
    }
 
    setArrayModificado(){
@@ -142,7 +142,7 @@ export class FichaProducto {
     p.cantidad -= cantidadFabricada;
   }
 
-    async mostrarAlerta() {
+  async mostrarAlerta() {
     const mensajeVender = 'Si estás vendiendo este producto, no puede aumentar el stock :(';
     const mensajeComprarFabricar = 'Si estás fabricando o comprando este producto, no puede disminuir el stock :('
     if(this.valorBotonHome==='vender'){
@@ -193,5 +193,14 @@ export class FichaProducto {
       await toast.present();
       
     }
+  }
+
+  /*****ELIMINAR PRODUCTOS ******/
+
+  eliminarProducto(){
+    this.seleccionarArray();
+    this.arrayActual = this.arrayActual.filter(p => p.id !== this.productoActual.id);
+    this.setArrayModificado()
+    
   }
 }

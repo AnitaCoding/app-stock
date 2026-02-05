@@ -1,15 +1,13 @@
 <ion-footer>
-    <!--Los iconos tb hay que importarlos chiqui-->
     <ion-toolbar>
-        <ion-buttons slot="secondary">
-            <!---->
+        <ion-buttons class="button-container">
             <ion-button [routerLink]="['/home']">
                 <ion-icon slot="icon-only" name="home"></ion-icon>
             </ion-button>
             <ion-button>
                 <ion-icon slot="icon-only" name="person-circle"></ion-icon>
             </ion-button>
-            <ion-button>
+            <ion-button><!--Este icono no lo enlazo con búsqueda porque sin valorbotonhome se rompe-->
                 <ion-icon slot="icon-only" name="search"></ion-icon>
             </ion-button>
             <ion-button>

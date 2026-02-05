@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { IonButton } from '@ionic/angular/standalone';
+import { IonButton, IonContent } from '@ionic/angular/standalone';
 
 
 @Component({
   selector: 'app-home',
-  imports: [IonButton, RouterLink],
+  imports: [IonButton, RouterLink, IonContent],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

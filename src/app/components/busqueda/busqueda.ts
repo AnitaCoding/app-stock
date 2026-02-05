@@ -47,11 +47,12 @@ export class Busqueda implements OnInit {
   //Obtenemos el array que corresponda según la acción que vamos a realizar
   //Comprar, vender, añadir...
 
+
   elegirArray (){
     let productosAlmacenados;
     if (this.valorBotonHome === 'vender' || this.valorBotonHome === 'fabricar'){
       this.nombreArray = 'productosFabricados'; 
-      productosAlmacenados = localStorage.getItem('productosFabricados')!;     
+      productosAlmacenados = localStorage.getItem('productosFabricados')!;   
     }else{
       this.nombreArray = 'productosVirgenes';
       productosAlmacenados = localStorage.getItem('productosVirgenes')!;      
@@ -94,11 +95,9 @@ export class Busqueda implements OnInit {
   buscarModelos(cat:String){
     this.categoriaElegida = cat;
 
-    const productosEncontrados= this.arrayProductos.filter(
-    producto => producto.tipo === cat
-
-    )
-
+    const productosEncontrados = this.arrayProductos.filter(
+    producto => producto.tipo === cat,
+    )    
     this.navegacionBusqueda(productosEncontrados)
     let p = new Producto;
     this.listaPropiedades = [];
@@ -148,6 +147,7 @@ export class Busqueda implements OnInit {
       producto => producto.color === col
     )
 
+    console.log(productosEncontrados)
     this.navegacionBusqueda(productosEncontrados)
     let p = new Producto;
     this.listaPropiedades = [];
@@ -178,7 +178,6 @@ export class Busqueda implements OnInit {
   navegacionBusqueda(productosEncontrados: Array<Producto>){
 
     if (productosEncontrados.length === 1) { //Este será el caso de productos vírgenes sin modelo, ni color, ni talla
-       
       this.productoActual.id = productosEncontrados[0].id;
       this.productoActual.tipo = productosEncontrados[0].tipo;
       this.productoActual.modelo = productosEncontrados[0].modelo;
@@ -191,6 +190,7 @@ export class Busqueda implements OnInit {
       this.router.navigate(['/busqueda'])
       this.buscaPropiedad = true;
       this.productosFiltrados = productosEncontrados;
+      console.log('los productos filtrados son ' + this.productosFiltrados)
     }
   }
   
