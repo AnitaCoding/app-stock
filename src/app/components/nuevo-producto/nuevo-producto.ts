@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonInput, IonItem, IonList, IonButton, IonText, IonSegment, IonLabel, IonSegmentButton} from '@ionic/angular/standalone';
+import { IonInput, IonItem, IonList, IonButton, IonText, IonSegment, IonLabel, IonSegmentButton, IonContent} from '@ionic/angular/standalone';
 import { Producto } from '../../models/producto';
 
 
 @Component({
   selector: 'app-nuevo-producto',
-  imports: [IonInput, IonItem, IonList, IonButton, IonText, IonSegment, IonLabel, IonSegmentButton,
+  imports: [IonInput, IonItem, IonList, IonButton, IonText, IonSegment, IonLabel, IonSegmentButton, IonContent,
     FormsModule
   ],
   templateUrl: './nuevo-producto.html',
@@ -58,7 +58,6 @@ export class NuevoProducto{
 
     this.arrayProductos.push(this.nuevoProducto);
     this.crearIdProducto();
-    console.log(this.nuevoProducto.id);
 
     if (this.opcionSeleccionada === 'virgen'){
       localStorage.setItem('productosVirgenes', JSON.stringify(this.arrayProductos));

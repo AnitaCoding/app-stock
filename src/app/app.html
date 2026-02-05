@@ -340,10 +340,49 @@
 <!-- * * * * * * * * * en header añadir botón atrás en los componentes que sea * * * * * * * * * * * -->
 <ion-header>
 <ion-toolbar>
+  <ion-tab-bar>
     <!--<ion-nav [root]="component"></ion-nav>-->
     <ion-title>Stockapp</ion-title>
+    <ion-tab-button tab="3" [routerLink]="['/alertas']">
+      <ion-icon name="notifications"></ion-icon>
+      <ion-badge color="danger">{{arrayAlertas.length}}</ion-badge>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+    
+    
   </ion-toolbar>
 </ion-header>
-<router-outlet />
+
+<ion-content>
+  <router-outlet />
+</ion-content>
+
+
 <app-nav-bar></app-nav-bar>
+<!--
+<ion-header>
+  <ion-toolbar>
+  <ion-tab-bar>
+    <ion-title>Stockapp</ion-title>
+    <ion-tab-button tab="3" [routerLink]="['/alertas']">
+      <ion-icon name="notifications"></ion-icon>
+      <ion-badge color="danger">{{arrayAlertas.length}}</ion-badge>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+    
+    
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-router-outlet></ion-router-outlet>
+</ion-content>
+
+<ion-footer>
+  <app-nav-bar></app-nav-bar>
+</ion-footer>
+-->
 

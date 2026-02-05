@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonList, IonSearchbar } from '@ionic/angular/standalone';
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonList, IonSearchbar, IonContent } from '@ionic/angular/standalone';
 import { Producto } from '../../models/producto';
 import { Router, RouterLink } from '@angular/router';
 import { ComunicarDatos } from '../../services/comunicar-datos';
@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-busqueda',
-  imports: [IonSearchbar, IonList,IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, RouterLink, FormsModule ],
+  imports: [IonSearchbar, IonList, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, RouterLink, FormsModule, IonContent],
   templateUrl: './busqueda.html',
   styleUrl: './busqueda.css',
 })
@@ -41,7 +41,8 @@ export class Busqueda implements OnInit {
   modeloElegido: String|null = null;
   colorElegido: String|null = null
   buscaTalla: boolean = false;
-  estadoActual:string = ''
+  estadoActual:string = '';
+  tallaElegida: String|null = null
 
   //Obtenemos el array que corresponda según la acción que vamos a realizar
   //Comprar, vender, añadir...
@@ -163,6 +164,15 @@ export class Busqueda implements OnInit {
       }
     }
     this.productosFiltrados = productosEncontrados;
+  }
+
+  mostrarProducto(t:String){
+    this.tallaElegida = t;
+    const productosEncontrados= this.productosFiltrados.filter(
+      producto => producto.talla === t
+    )
+    this.navegacionBusqueda(productosEncontrados)
+
   }
 
   navegacionBusqueda(productosEncontrados: Array<Producto>){
