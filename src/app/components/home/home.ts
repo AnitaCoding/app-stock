@@ -11,9 +11,15 @@ import { IonButton, IonContent } from '@ionic/angular/standalone';
 })
 export class Home {
 
+  valorBoton: string;
+  
+  constructor(){
+    this.valorBoton = '';
+  }
+
   setValueBoton(value: string){
-    let valorBoton = value;
-    localStorage.setItem('valorBotonHome',valorBoton);
+    this.valorBoton = value;
+    localStorage.setItem('valorBotonHome',this.valorBoton);
     
   }
 

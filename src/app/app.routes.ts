@@ -6,6 +6,8 @@ import { NuevoProducto } from './components/nuevo-producto/nuevo-producto';
 import { Busqueda } from './components/busqueda/busqueda';
 import { FichaProducto } from './components/ficha-producto/ficha-producto';
 import { Alertas } from './components/alertas/alertas';
+import { TablaConsulta } from './components/tabla-consulta/tabla-consulta';
+import { SelectorTipoProducto } from './components/selector-tipo-producto/selector-tipo-producto';
 
 
 export const routes: Routes = [
@@ -13,5 +15,7 @@ export const routes: Routes = [
     {path:'nuevo-producto', component:NuevoProducto},
     {path:'busqueda', component:Busqueda},
     {path: 'ficha-producto', component:FichaProducto},
-    {path: 'alertas', component:Alertas}
+    {path: 'alertas', component:Alertas},
+    {path: 'tabla-consulta', component:TablaConsulta},
+    {path: 'selector-tipo-producto', component: SelectorTipoProducto}
 ];

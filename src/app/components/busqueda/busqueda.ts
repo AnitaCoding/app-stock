@@ -9,27 +9,47 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-busqueda',
-  imports: [IonSearchbar, IonList, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, RouterLink, FormsModule, IonContent],
+  imports: [IonSearchbar, IonList, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle,
+     IonCardContent, RouterLink, FormsModule, IonContent],
   templateUrl: './busqueda.html',
   styleUrl: './busqueda.css',
 })
 export class Busqueda implements OnInit {
 
+  valorBotonHome: string = '';
+  valorConsulta: string = '';
+  paginaFinal: string = '';
   ngOnInit(): void {
-    this.elegirArray();
-    this.buscarCategorias();
+    this.valorBotonHome = localStorage.getItem('valorBotonHome')!;
+    console.log(this.valorBotonHome);
+    this.valorConsulta = localStorage.getItem('consulta')!;
+    console.log(this.valorConsulta);
+    this.paginaFinal = '';
+
+    this.setPaginaFinal();
+
+    
+    if( this.valorBotonHome === 'vender' || this.valorBotonHome === 'fabricar' || this.valorBotonHome === 'comprar'){
+      this.elegirArray();
+      this.buscarCategorias();
+    }else{
+      this.elegirArrayConsulta(this.valorConsulta);
+      this.buscarCategorias();
+    }
+ 
     
   }
 
   constructor(private router: Router, 
     public servicio_comunicar_datos: ComunicarDatos, public servicio_comunicar_array_productos:ComunicarArrayProductos){
+      
         
   }
 
   
   nombreArray: string = '';
 
-  valorBotonHome = localStorage.getItem('valorBotonHome');
+  
   arrayProductos: Producto[] = [];
   terminoBusqueda: string = '';
   listaPropiedades: String[] = [];
@@ -46,9 +66,17 @@ export class Busqueda implements OnInit {
 
   //Obtenemos el array que corresponda según la acción que vamos a realizar
   //Comprar, vender, añadir...
+  setPaginaFinal(){
+    if(this.valorBotonHome === 'vender' || this.valorBotonHome === 'fabricar' || this.valorBotonHome === 'comprar'){
+      this.paginaFinal = "/ficha-producto"
+    }else{
+      this.paginaFinal = '/tabla-consulta';
+    }
 
-
-  elegirArray (){
+    console.log(this.paginaFinal)
+  }
+  
+  elegirArray(){
     let productosAlmacenados;
     if (this.valorBotonHome === 'vender' || this.valorBotonHome === 'fabricar'){
       this.nombreArray = 'productosFabricados'; 
@@ -60,6 +88,20 @@ export class Busqueda implements OnInit {
     this.arrayProductos = JSON.parse(productosAlmacenados);
   }
 
+  elegirArrayConsulta(consulta:string){
+
+    let productos;
+
+    if(consulta === 'productosVirgenes'){
+      productos = localStorage.getItem('productosVirgenes')!;
+    }else{
+      productos = localStorage.getItem('productosFabricados')!;
+    }
+
+    this.arrayProductos = JSON.parse(productos)
+    
+  }
+
   //Obtenemos las categorías de los productos del array para crear los botones.
   buscarCategorias(){
     let p = new Producto;
@@ -68,7 +110,7 @@ export class Busqueda implements OnInit {
       if(!this.listaPropiedades.includes(p.tipo)){
         this.listaPropiedades.push(p.tipo)
       }
-    }
+    } 
   }
 
   buscarProductos() {
@@ -95,6 +137,12 @@ export class Busqueda implements OnInit {
   buscarModelos(cat:String){
     this.categoriaElegida = cat;
 
+    
+    if(this.valorBotonHome === 'consultar'){
+      this.router.navigate([this.paginaFinal]);
+      localStorage.setItem('categoriaConsulta', cat.toString())
+    }
+
     const productosEncontrados = this.arrayProductos.filter(
     producto => producto.tipo === cat,
     )    
@@ -114,6 +162,7 @@ export class Busqueda implements OnInit {
       }
     }  
     this.productosFiltrados = productosEncontrados;
+
   }
 
   buscarColores(mod: String){
@@ -185,7 +234,7 @@ export class Busqueda implements OnInit {
       this.productoActual.talla = productosEncontrados[0].talla;
       this.productoActual.cantidad =productosEncontrados[0].cantidad;
       this.comunicarDatos(this.productoActual.id, this.productoActual.tipo, this.productoActual.color, this.productoActual.talla, this.productoActual.cantidad, this.productoActual.modelo)
-      this.router.navigate(['/ficha-producto']);
+      this.router.navigate([this.paginaFinal]);
     } else if (productosEncontrados.length > 1) {
       this.router.navigate(['/busqueda'])
       this.buscaPropiedad = true;

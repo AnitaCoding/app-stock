@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { IonFooter, IonIcon, IonToolbar, IonButton, IonButtons} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
-import { personCircle, search, statsChart, home } from 'ionicons/icons';
+import { statsChart, home, storefront, logoEuro } from 'ionicons/icons';
 @Component({
   selector: 'app-nav-bar',
   imports: [IonFooter, IonToolbar, IonIcon, IonButton, IonButtons, RouterLink],
@@ -17,7 +17,7 @@ export class NavBar {
      * can be registered in app.component.ts and then
      * referenced by name anywhere in your application.
      */
-    addIcons({ personCircle, search, statsChart, home});
+    addIcons({ logoEuro, storefront, statsChart, home});
   }
 
 }

@@ -1,10 +1,12 @@
 
-<ion-content >
+<ion-content>
     <div class="container">
         <ion-searchbar [(ngModel)]="terminoBusqueda" placeholder="Buscar producto" (ionInput)="buscarProductos()"></ion-searchbar>
 
+
+
 <!--Si el término de búsqueda está vacío, muestra lista de categorías independientemente de la acción-->
-        @if(!terminoBusqueda && categoriaElegida===null){
+        @if (!terminoBusqueda && categoriaElegida===null){
         <ion-list>
             @for (p of listaPropiedades; track p){
                 <ion-card (click)="buscarModelos(p)">      
@@ -43,7 +45,7 @@
         @if(!terminoBusqueda && colorElegido!=null){
         <ion-list>
             @for (p of listaPropiedades; track p){
-                <ion-card [routerLink]="['/ficha-producto']" (click)="mostrarProducto(p)">       
+                <ion-card [routerLink]="paginaFinal" (click)="mostrarProducto(p)">       
                     <ion-card-header>
                         <ion-card-title>{{ p }}</ion-card-title>
                     </ion-card-header>
@@ -56,7 +58,7 @@
         @if(terminoBusqueda){
         <ion-list>
             @for (p of productosFiltrados; track p){
-                <ion-card [routerLink]="['/ficha-producto']" (click)="comunicarDatos(p.id, p.tipo, p.color, p.talla, p.cantidad, p.modelo)">
+                <ion-card [routerLink]="paginaFinal" (click)="comunicarDatos(p.id, p.tipo, p.color, p.talla, p.cantidad, p.modelo)">
                     <ion-card-header>
                         <ion-card-title>{{ p.tipo }}</ion-card-title>
                         <ion-card-subtitle>{{ p.modelo }}</ion-card-subtitle>
@@ -80,7 +82,5 @@
 <!--Estaría bien añadir una X por si quiero eliminar el término de búsqueda entero-->
         
     </div>
-
-
 
 </ion-content>
