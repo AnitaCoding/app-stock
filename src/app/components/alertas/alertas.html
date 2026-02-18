@@ -8,8 +8,14 @@
       </ion-card-header>
 
       <ion-card-content>
-        <p>Color: {{p.color}}</p>
-        <p>Talla: {{p.talla}}</p>
+        @if(p.color){
+          <p>Color: {{p.color}}</p>
+        }
+        
+        @if(p.talla){
+          <p>Talla: {{p.talla}}</p>
+        }
+        
         <!--Esto quizás debía ser un input para calcular las unidades fabricadas, porque puntualmente, puede que no pueda fabricar tdas a la vez-->
         <ion-input #cantidad label="Stock" type="number" placeholder={{p.cantidad}}></ion-input>
       </ion-card-content>

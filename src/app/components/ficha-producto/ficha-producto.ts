@@ -51,18 +51,24 @@ export class FichaProducto {
 
       }else if(this.valorBotonHome==='vender' && this.arrayActual[i].cantidad < this.productoActual.cantidad){
         this.mostrarAlerta();
-        this.productoActual.cantidad = this.arrayActual[i].cantidad
+        this.productoActual.cantidad = this.arrayActual[i].cantidad;
+
       } else if(this.valorBotonHome==='fabricar' || this.valorBotonHome==='comprar' && this.arrayActual[i].cantidad < this.productoActual.cantidad){
+        
         cantidad = this.arrayActual[i].cantidad;
         this.arrayActual[i].cantidad = this.productoActual.cantidad;
         this.setArrayModificado();
         this.mostrarToast('middle');
+
         if(this.valorBotonHome === 'fabricar'){
                 this.buscarProductoVirgen(cantidad);
         }
+
       }else if(this.valorBotonHome==='fabricar'||this.valorBotonHome==='comprar' && this.arrayActual[i].cantidad > this.productoActual.cantidad ){
+        
         this.mostrarAlerta();
-        this.productoActual.cantidad = this.arrayActual[i].cantidad
+        this.productoActual.cantidad = this.arrayActual[i].cantidad;
+        
       }
     }
   }

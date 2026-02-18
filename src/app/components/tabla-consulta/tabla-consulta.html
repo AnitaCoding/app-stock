@@ -1,7 +1,26 @@
 <ion-content>
     <div class="container">
         <table>
-            
+            <thead>
+                <tr>
+                    @for (prop of propiedadesProducto; track prop){
+                        <th>{{prop}}</th>
+
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (p of productosFiltrados; track p){
+                    <tr>
+                        <td>{{p.id}}</td>
+                        <td>{{p.tipo}}</td>
+                        <td>{{p.color}}</td>
+                        <td>{{p.talla}}</td>
+                        <td>{{p.cantidad}}</td>
+                        <td>{{p.modelo}}</td>
+                    </tr>
+                }
+            </tbody>
         </table>
     </div>
 </ion-content>

@@ -137,31 +137,35 @@ export class Busqueda implements OnInit {
   buscarModelos(cat:String){
     this.categoriaElegida = cat;
 
-    
     if(this.valorBotonHome === 'consultar'){
       this.router.navigate([this.paginaFinal]);
       localStorage.setItem('categoriaConsulta', cat.toString())
+
+    }else{
+
+      const productosEncontrados = this.arrayProductos.filter(
+      producto => producto.tipo === cat,
+      )    
+      this.navegacionBusqueda(productosEncontrados)
+      let p = new Producto;
+      this.listaPropiedades = [];
+      for (let i = 0; i < this.productosFiltrados.length ; i++){
+        
+        p = this.productosFiltrados[i];
+        
+        if(p.modelo){  
+          if(!this.listaPropiedades.includes(p.modelo)){
+            this.listaPropiedades.push(p.modelo)        
+          }
+        }else{
+          this.buscarColores('');
+        }
+      }  
+      this.productosFiltrados = productosEncontrados;
+
     }
 
-    const productosEncontrados = this.arrayProductos.filter(
-    producto => producto.tipo === cat,
-    )    
-    this.navegacionBusqueda(productosEncontrados)
-    let p = new Producto;
-    this.listaPropiedades = [];
-    for (let i = 0; i < this.productosFiltrados.length ; i++){
-      
-      p = this.productosFiltrados[i];
-      
-      if(p.modelo){  
-        if(!this.listaPropiedades.includes(p.modelo)){
-          this.listaPropiedades.push(p.modelo)        
-        }
-      }else{
-        this.buscarColores('');
-      }
-    }  
-    this.productosFiltrados = productosEncontrados;
+    
 
   }
 
