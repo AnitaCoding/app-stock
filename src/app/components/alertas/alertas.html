@@ -1,5 +1,8 @@
 <ion-content>
   <div class="container">
+    <ion-text color="primary">
+        <h1>alertas</h1>
+    </ion-text>
     @for (p of arrayAlertas; track p){
     <ion-card>
       <ion-card-header>
@@ -17,9 +20,9 @@
         }
         
         <!--Esto quizás debía ser un input para calcular las unidades fabricadas, porque puntualmente, puede que no pueda fabricar tdas a la vez-->
-        <ion-input #cantidad label="Stock" type="number" placeholder={{p.cantidad}}></ion-input>
+        <ion-input #cantidad label="Stock" type="number" min="0" fill="solid" placeholder={{p.cantidad}}></ion-input>
       </ion-card-content>
-      <ion-button fill="clear" (click)="encuentraProductoVirgen(p, cantidad.value)">Fabricar</ion-button>
+      <ion-button expand="block" (click)="encuentraProductoVirgen(p, cantidad.value)">Fabricar</ion-button>
     </ion-card>
     }
   </div>

@@ -1,0 +1,11 @@
+.container{
+    padding: 4rem .25rem;
+}
+
+th, td{
+    border: solid 1px dimgray;
+    width: 100%;
+    padding: .25rem;
+    text-align: center;
+    text-transform: capitalize;
+}

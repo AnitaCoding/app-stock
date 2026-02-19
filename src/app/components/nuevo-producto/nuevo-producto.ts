@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonInput, IonItem, IonList, IonButton, IonText, IonSegment, IonLabel, IonSegmentButton, IonContent, ToastController, AlertController} from '@ionic/angular/standalone';
 import { Producto } from '../../models/producto';
+import { ServicioLocalstorage } from '../../services/servicio-localstorage';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { Producto } from '../../models/producto';
 })
 
 export class NuevoProducto{
-  constructor(private toastController: ToastController, private alertCtrl:AlertController){}
+  constructor(private toastController: ToastController, private alertCtrl:AlertController, public servicio_localstorage:ServicioLocalstorage){}
 
 
   opcionSeleccionada: string = 'virgen';
@@ -35,16 +36,11 @@ export class NuevoProducto{
   }
 
   //Añadir producto al array de productos que corresponda
-  almacenarProducto(){
-
-    
-  }
 
   botonGuardar(c:string){
     this.obtenerProductos();
     this.guardarProductos(c);
-    this.limpiarInputs();
-    
+    this.limpiarInputs();   
   }
 
   botonCancelar(c:string){
@@ -61,20 +57,19 @@ export class NuevoProducto{
   }
 
   guardarProductos(c:string){
-    if(this.opcionSeleccionada === 'fabricado' && this.nuevoProducto.modelo === ''){
+    if(this.opcionSeleccionada === 'fabricado' && !this.nuevoProducto.modelo){
       this.mostrarAlerta();
     }else{
       this.arrayProductos.push(this.nuevoProducto);
       this.crearIdProducto();
 
       if (this.opcionSeleccionada === 'virgen'){
-        localStorage.setItem('productosVirgenes', JSON.stringify(this.arrayProductos));
+        this.servicio_localstorage.setArrayVirgenes(this.arrayProductos)
       }else{
-        localStorage.setItem('productosFabricados', JSON.stringify(this.arrayProductos));
+        this.servicio_localstorage.setArrayVirgenes(this.arrayProductos)
       }
       this.mostrarToast('middle', c)
     }
-    
   }
 
   //creo un id de producto para que sea más fácil buscarlo en el array que corresponda
@@ -83,19 +78,11 @@ export class NuevoProducto{
   }
 
   obtenerProductos(){
-    let productosAlmacenados;
-
-    //Se utiliza el operador nullish ?? en lugar de hacer un if que chequee si existe el array 
-    //en el localstorage, si no existe, lo crea
-
     if(this.opcionSeleccionada === 'virgen'){
-      productosAlmacenados = localStorage.getItem('productosVirgenes') ?? '[]';
+      this.arrayProductos = this.servicio_localstorage.getArrayVirgenes();
     }else{
-      productosAlmacenados = localStorage.getItem('productosFabricados') ?? '[]';
+      this.arrayProductos = this.servicio_localstorage.getArrayFabricados();
     }
-
-    this.arrayProductos = JSON.parse(productosAlmacenados);
-
   }
 
   async mostrarToast(position: "top" | "bottom" | "middle" | undefined, c:string){

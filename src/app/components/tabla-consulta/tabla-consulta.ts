@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonContent } from "@ionic/angular/standalone";
 import { Producto } from '../../models/producto';
+import { ServicioLocalstorage } from '../../services/servicio-localstorage';
 
 @Component({
   selector: 'app-tabla-consulta',
@@ -16,7 +17,7 @@ export class TablaConsulta {
   productosFiltrados: Producto[] = [];
   propiedadesProducto: string[] = []
 
-  constructor(){
+  constructor(public servicio_localstorage:ServicioLocalstorage){
     this.setArrayActual();
     this.buscarProductos();
     this.obtenerPropiedades();
@@ -25,30 +26,19 @@ export class TablaConsulta {
 
   setArrayActual(){
     if(this.nombreArray === 'productosVirgenes'){
-
-      this.arrayActual = JSON.parse(localStorage.getItem('productosVirgenes')!)
-
+      this.arrayActual = this.servicio_localstorage.getArrayVirgenes()
     }else{
-
-      this.arrayActual = JSON.parse(localStorage.getItem('productosFabricados')!)
+      this.arrayActual = this.servicio_localstorage.getArrayFabricados()
     }
-
   }
 
   buscarProductos(){
     this.productosFiltrados = this.arrayActual.filter(
       producto => producto.tipo === this.categoria,
       )
-
   }
 
   obtenerPropiedades(){
     this.propiedadesProducto = Object.keys(this.productosFiltrados[0])
   }
-
-  //obtener array que corresponda
-  //buscar categoria en el array
-  //obtener nombres de propiedades
-  //mostrar elementos
-
 }

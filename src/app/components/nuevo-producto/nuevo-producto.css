@@ -1,3 +1,37 @@
+ion-content{
+    height: 100%;
+}
+
 .container{
+    height: 100%;
     padding: 4rem 0;
+}
+
+h1{
+    font-weight: 800;
+    text-align: center;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+}
+
+.segment-content{
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+}
+
+.segment-buttons{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+ion-button{
+    margin: .5rem 1rem;
+}
+
+ion-button::part(native){
+    padding: 1.25rem;
 }

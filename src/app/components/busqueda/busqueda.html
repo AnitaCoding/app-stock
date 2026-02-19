@@ -1,9 +1,10 @@
 
 <ion-content>
     <div class="container">
-        <ion-searchbar [(ngModel)]="terminoBusqueda" placeholder="Buscar producto" (ionInput)="buscarProductos()"></ion-searchbar>
-
-
+        <ion-text color="primary">
+            <h1>{{valorBotonHome}}</h1>
+        </ion-text>
+        <ion-searchbar [(ngModel)]="terminoBusqueda" placeholder="Buscar producto" show-clear-button="focus" (ionInput)="buscarProductos()"></ion-searchbar>
 
 <!--Si el término de búsqueda está vacío, muestra lista de categorías independientemente de la acción-->
         @if (!terminoBusqueda && categoriaElegida===null){

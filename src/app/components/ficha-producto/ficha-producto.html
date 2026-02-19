@@ -4,21 +4,23 @@
     <ion-card>
       <ion-card-header>
         <ion-card-title>{{productoActual.tipo}}</ion-card-title>
+        <ion-card-subtitle>{{productoActual.modelo}}</ion-card-subtitle>
 
       </ion-card-header>
 
       <ion-card-content>
-        <p>{{productoActual.modelo}}</p>
         <p>{{productoActual.color}}</p>
         <p>{{productoActual.talla}}</p>
 
         <!--Aquí hay que poner un if. Si es solo consulta, esto NO puede ser un input-->
-        <ion-input label="Stock" type="number" placeholder={{productoActual.cantidad}} [(ngModel)]="productoActual.cantidad"></ion-input>
+        <ion-input label="Stock" type="number" min="0" placeholder={{productoActual.cantidad}} fill="solid" [(ngModel)]="productoActual.cantidad"></ion-input>
 
       </ion-card-content>
-        <ion-button fill="clear" (click)="guardarCambios()">Guardar</ion-button>
-        <ion-button fill="clear" (click)="cancelarCambios('middle')">Cancelar</ion-button>
-        <ion-button fill="clear" color="danger" (click)="eliminarProducto()">Eliminar</ion-button>
+      <div class="card-buttons">
+        <ion-button expand="block" (click)="guardarCambios()">Guardar</ion-button>
+        <ion-button expand="block" (click)="cancelarCambios('middle')">Cancelar</ion-button>
+        <ion-button expand="block" color="danger" (click)="eliminarProducto()">Eliminar</ion-button>
+      </div>
     </ion-card>
   }
 
@@ -26,7 +28,6 @@
       <ion-card>
         <ion-card-header>
           <ion-card-title>{{productoActual.tipo}}</ion-card-title>
-
         </ion-card-header>
 
         <ion-card-content>
@@ -35,14 +36,15 @@
           <p>{{productoActual.talla}}</p>
 
           <!--Aquí hay que poner un if. Si es solo consulta, esto NO puede ser un input-->
-          <ion-input label="Stock" type="number" placeholder={{productoActual.cantidad}} [(ngModel)]="productoActual.cantidad"></ion-input>
+          <ion-input label="Stock" type="number" min="0" placeholder={{productoActual.cantidad}} fill="solid" [(ngModel)]="productoActual.cantidad"></ion-input>
 
         </ion-card-content>
-
-        <ion-button fill="clear" (click)="guardarCambios()">Guardar</ion-button>
-        <ion-button fill="clear" (click)="cancelarCambios('middle')">Cancelar</ion-button>
-        <ion-button fill="clear" color="danger" (click)="eliminarProducto()">Eliminar</ion-button>
-
+        <div class="card-buttons">
+          <ion-button expand="block" (click)="guardarCambios()">Guardar</ion-button>
+          <ion-button expand="block" (click)="cancelarCambios('middle')">Cancelar</ion-button>
+          <ion-button expand="block" color="danger" (click)="eliminarProducto()">Eliminar</ion-button>
+        </div>
+        
     </ion-card>
     }
 

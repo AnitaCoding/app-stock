@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonInput, AlertController, ToastController, IonContent } from '@ionic/angular/standalone';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonInput, AlertController, ToastController, IonContent, IonCardSubtitle } from '@ionic/angular/standalone';
 import { ComunicarDatos } from '../../services/comunicar-datos';
 import { Producto } from '../../models/producto';
 import { ComunicarArrayProductos } from '../../services/comunicar-array-productos';
 import { FormsModule } from '@angular/forms';
 import { trash } from 'ionicons/icons';
+import { ServicioLocalstorage } from '../../services/servicio-localstorage';
 //import { AlertController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-ficha-producto',
-  imports: [IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonButton, IonInput, FormsModule, IonContent],
+  imports: [IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonButton, IonInput, FormsModule, IonContent, IonCardSubtitle],
   templateUrl: './ficha-producto.html',
   styleUrl: './ficha-producto.css',
 })
@@ -22,7 +23,7 @@ export class FichaProducto {
 
    constructor(
     public servicio_comunicar_datos: ComunicarDatos, public servicio_comunicar_nombre_array:ComunicarArrayProductos,
-     private alertCtrl:AlertController, private toastController: ToastController){
+     private alertCtrl:AlertController, private toastController: ToastController, public servicio_localstorage:ServicioLocalstorage){
 
       this.productoActual = this.servicio_comunicar_datos.productoActual;
 
@@ -73,37 +74,18 @@ export class FichaProducto {
     }
   }
 
-   seleccionarArray(){
-    this.arrayActual = JSON.parse(localStorage.getItem(this.servicio_comunicar_nombre_array.nombreArrayProductos)!);
-   }
+  seleccionarArray(){
+    this.arrayActual = this.servicio_localstorage.getArrayProductos(this.servicio_comunicar_nombre_array.nombreArrayProductos)
+  }
 
-   setArrayModificado(){
-    localStorage.setItem(this.servicio_comunicar_nombre_array.nombreArrayProductos, JSON.stringify(this.arrayActual));
-    
-   }
-
-   setArrayAlertas(){
-    localStorage.setItem('alertasProductos', JSON.stringify(this.arrayAlertas));
-   }
-
-   seleccionarArrayVirgenes(){
-    this.arrayVirgenes = JSON.parse(localStorage.getItem('productosVirgenes')!)
-   }
-
-  setArrayVirgenes(){
-    localStorage.setItem('productosVirgenes', JSON.stringify(this.arrayVirgenes));
-
+  setArrayModificado(){
+    this.servicio_localstorage.setArrayProductos(this.servicio_comunicar_nombre_array.nombreArrayProductos, this.arrayActual)
   }
   
-  obtenerArrayAlertas(){
-    this.arrayAlertas = JSON.parse(localStorage.getItem('alertasProductos')!);
-  }
-
   incluirAlerta(c:number){
-    this.obtenerArrayAlertas();
+    this.arrayAlertas = this.servicio_localstorage.getArrayAlertas()
     this.buscarAlerta(c);
-
-   }
+  }
   
   buscarAlerta(c:number){
     let producto = this.arrayAlertas.find(
@@ -124,7 +106,7 @@ export class FichaProducto {
     }
     console.log(this.arrayAlertas);
     this.restarVendido(c, producto);
-    this.setArrayAlertas();
+    this.servicio_localstorage.setArrayAlertas(this.arrayAlertas)
   }
 
   restarVendido(c:number, p:Producto){
@@ -133,14 +115,14 @@ export class FichaProducto {
   }
 
   buscarProductoVirgen(c:number){
-    this.seleccionarArrayVirgenes();
+    this.arrayVirgenes = this.servicio_localstorage.getArrayVirgenes();
     const productoEncontrado = this.arrayVirgenes.find(p =>
       p.tipo === this.productoActual.tipo &&
       p.color === this.productoActual.color &&
       p.talla === this.productoActual.talla
   );
     this.restarVirgen(c, productoEncontrado!)
-    this.setArrayVirgenes();
+    this.servicio_localstorage.setArrayVirgenes(this.arrayVirgenes)
   }
 
   restarVirgen(c: number, p: Producto){

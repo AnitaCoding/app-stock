@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCheckbox, IonItem, IonLabel, IonCardSubtitle, IonButton, IonInput, IonContent } from '@ionic/angular/standalone';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonButton, IonInput, IonContent, IonText } from '@ionic/angular/standalone';
 import { Producto } from '../../models/producto';
+import { ServicioLocalstorage } from '../../services/servicio-localstorage';
 
 @Component({
   selector: 'app-alertas',
-  imports: [IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonButton, IonInput, IonContent],
+  imports: [IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonButton, IonInput, IonContent, IonText],
   templateUrl: './alertas.html',
   styleUrl: './alertas.css',
 })
@@ -13,13 +14,12 @@ export class Alertas {
   arrayVirgenes:Producto[] = []
   arrayFabricados: Producto[] = []
 
-  constructor(){
-    this.getArrayAlertas()
+  constructor(public servicio_localstorage:ServicioLocalstorage){
+    this.arrayAlertas = this.servicio_localstorage.getArrayAlertas()
   }
-
   
   encuentraProductoVirgen(producto: Producto, c:any){
-    this.getArrayVirgenes();
+    this.arrayVirgenes = this.servicio_localstorage.getArrayVirgenes()
     const productoEncontrado = this.arrayVirgenes.find(p =>
       p.tipo === producto.tipo &&
       p.color === producto.color &&
@@ -27,7 +27,7 @@ export class Alertas {
     );
 
     this.restarProducto(productoEncontrado!, producto, c);
-    this.setArrayVirgenes();
+    this.servicio_localstorage.setArrayVirgenes(this.arrayVirgenes)  
     this.encuentraProductoFabricado(producto, c)
     producto.cantidad = c;
     this.encuentraAlerta(producto, c)
@@ -39,7 +39,10 @@ export class Alertas {
 
   }
   encuentraAlerta(producto: Producto, c:any){
-    this.getArrayAlertas();
+    //    this.arrayAlertas = this.servicio_localstorage.getArrayAlertas()
+
+    /***COMPROBAR SI LA LINEA ANTERIOR ES REALMENTE NECESARIA, EN EL CONSTRUCTOR, YA SE HA OBTENIDO EL ARRAY ****/
+
     const productoEncontrado = this.arrayAlertas.find(p =>
       p.id === producto.id
     );
@@ -48,46 +51,24 @@ export class Alertas {
     if(c == 0){
       this.eliminarProducto(producto)
     }
-    this.setArrayAlertas();
+
+    this.servicio_localstorage.setArrayAlertas(this.arrayAlertas)
+
   }
 
   encuentraProductoFabricado(producto:Producto, c:any){
-    this.getArrayFabricados();
-      const productoEncontrado = this.arrayFabricados.find(p =>
-        p.id === producto.id
-      );
-      this.modificarProductoFabricado(productoEncontrado!, producto, c)
-      this.setArrayFabricados()
+    this.arrayFabricados = this.servicio_localstorage.getArrayFabricados();
+
+    const productoEncontrado = this.arrayFabricados.find(p =>
+      p.id === producto.id
+    );
+    this.modificarProductoFabricado(productoEncontrado!, producto, c)
+    this.servicio_localstorage.setArrayFabricados(this.arrayFabricados)
   }
 
   modificarProductoFabricado(pEncontrado: Producto, pActual:Producto, cInput:number){
     let cantidad = pActual.cantidad - cInput;
     pEncontrado.cantidad += cantidad
-  }
- 
-  getArrayVirgenes(){
-    this.arrayVirgenes = JSON.parse(localStorage.getItem('productosVirgenes')!)
-  }
-
-  getArrayAlertas(){
-    this.arrayAlertas = JSON.parse(localStorage.getItem('alertasProductos')!)
-  }
-
-  getArrayFabricados(){
-    this.arrayFabricados = JSON.parse(localStorage.getItem('productosFabricados')!)
-  }
-
-  setArrayVirgenes(){
-    localStorage.setItem('productosVirgenes', JSON.stringify(this.arrayVirgenes));
-  
-  }
-
-  setArrayAlertas(){
-    localStorage.setItem('alertasProductos', JSON.stringify(this.arrayAlertas));
-  }
-
-  setArrayFabricados(){
-    localStorage.setItem('productosFabricados', JSON.stringify(this.arrayFabricados));
   }
 
   eliminarProducto(producto: Producto){

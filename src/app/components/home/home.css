@@ -6,5 +6,10 @@
 }
 
 ion-button{
-    flex:1
+    flex:1;
+    padding: 1rem;
+}
+
+ion-button::part(native):hover > a{
+    background-color: pink;
 }

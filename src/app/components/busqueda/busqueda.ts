@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonList, IonSearchbar, IonContent } from '@ionic/angular/standalone';
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonList, IonSearchbar, IonContent, IonText } from '@ionic/angular/standalone';
 import { Producto } from '../../models/producto';
 import { Router, RouterLink } from '@angular/router';
 import { ComunicarDatos } from '../../services/comunicar-datos';
 import { ComunicarArrayProductos } from '../../services/comunicar-array-productos';
 import { FormsModule } from '@angular/forms';
+import { ServicioLocalstorage } from '../../services/servicio-localstorage';
 
 
 @Component({
   selector: 'app-busqueda',
   imports: [IonSearchbar, IonList, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle,
-     IonCardContent, RouterLink, FormsModule, IonContent],
+     IonCardContent, RouterLink, FormsModule, IonContent, IonText],
   templateUrl: './busqueda.html',
   styleUrl: './busqueda.css',
 })
@@ -21,14 +22,10 @@ export class Busqueda implements OnInit {
   paginaFinal: string = '';
   ngOnInit(): void {
     this.valorBotonHome = localStorage.getItem('valorBotonHome')!;
-    console.log(this.valorBotonHome);
     this.valorConsulta = localStorage.getItem('consulta')!;
-    console.log(this.valorConsulta);
     this.paginaFinal = '';
-
     this.setPaginaFinal();
 
-    
     if( this.valorBotonHome === 'vender' || this.valorBotonHome === 'fabricar' || this.valorBotonHome === 'comprar'){
       this.elegirArray();
       this.buscarCategorias();
@@ -36,20 +33,15 @@ export class Busqueda implements OnInit {
       this.elegirArrayConsulta(this.valorConsulta);
       this.buscarCategorias();
     }
- 
-    
+  
   }
 
   constructor(private router: Router, 
-    public servicio_comunicar_datos: ComunicarDatos, public servicio_comunicar_array_productos:ComunicarArrayProductos){
-      
-        
+    public servicio_comunicar_datos: ComunicarDatos, public servicio_comunicar_array_productos:ComunicarArrayProductos,
+     public servicio_localStorage:ServicioLocalstorage){
   }
-
   
   nombreArray: string = '';
-
-  
   arrayProductos: Producto[] = [];
   terminoBusqueda: string = '';
   listaPropiedades: String[] = [];
@@ -72,34 +64,25 @@ export class Busqueda implements OnInit {
     }else{
       this.paginaFinal = '/tabla-consulta';
     }
-
-    console.log(this.paginaFinal)
   }
   
   elegirArray(){
-    let productosAlmacenados;
     if (this.valorBotonHome === 'vender' || this.valorBotonHome === 'fabricar'){
-      this.nombreArray = 'productosFabricados'; 
-      productosAlmacenados = localStorage.getItem('productosFabricados')!;   
+      this.nombreArray = 'productosFabricados';
+      this.arrayProductos = this.servicio_localStorage.getArrayFabricados();   
     }else{
       this.nombreArray = 'productosVirgenes';
-      productosAlmacenados = localStorage.getItem('productosVirgenes')!;      
+      this.arrayProductos = this.servicio_localStorage.getArrayVirgenes();      
     }
-    this.arrayProductos = JSON.parse(productosAlmacenados);
   }
 
   elegirArrayConsulta(consulta:string){
 
-    let productos;
-
     if(consulta === 'productosVirgenes'){
-      productos = localStorage.getItem('productosVirgenes')!;
+      this.arrayProductos = this.servicio_localStorage.getArrayVirgenes();
     }else{
-      productos = localStorage.getItem('productosFabricados')!;
-    }
-
-    this.arrayProductos = JSON.parse(productos)
-    
+      this.arrayProductos = this.servicio_localStorage.getArrayFabricados()
+    }    
   }
 
   //Obtenemos las categorías de los productos del array para crear los botones.
@@ -122,7 +105,6 @@ export class Busqueda implements OnInit {
     
     Puedo añadir campos toLowerCase a la plantilla del objeto, para que no haya que hacer toLowerCase() cada vez, por ejemplo:
     producto.tipoLower y almacenar ahí el tipo en lower case*/
-
 
     const palabras = this.terminoBusqueda.toLowerCase().trim().split(/\s+/)
 
@@ -162,11 +144,7 @@ export class Busqueda implements OnInit {
         }
       }  
       this.productosFiltrados = productosEncontrados;
-
     }
-
-    
-
   }
 
   buscarColores(mod: String){
@@ -199,8 +177,6 @@ export class Busqueda implements OnInit {
     const productosEncontrados= this.productosFiltrados.filter(
       producto => producto.color === col
     )
-
-    console.log(productosEncontrados)
     this.navegacionBusqueda(productosEncontrados)
     let p = new Producto;
     this.listaPropiedades = [];
@@ -243,11 +219,9 @@ export class Busqueda implements OnInit {
       this.router.navigate(['/busqueda'])
       this.buscaPropiedad = true;
       this.productosFiltrados = productosEncontrados;
-      console.log('los productos filtrados son ' + this.productosFiltrados)
     }
   }
   
-
   //Utilizamos el servicio comunicarDatos para pasar los datos del producto a la ficha
   comunicarDatos(id: number, tipo:string, color:string, talla:string, cantidad:number, modelo:string){
     this.productoActual.id = id;
