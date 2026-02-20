@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonButton, IonInput, IonContent, IonText } from '@ionic/angular/standalone';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonButton, IonInput, IonContent, IonText, AlertController } from '@ionic/angular/standalone';
 import { Producto } from '../../models/producto';
 import { ServicioLocalstorage } from '../../services/servicio-localstorage';
+import { ServicioAlertas } from '../../services/servicio-alertas';
 
 @Component({
   selector: 'app-alertas',
@@ -13,24 +14,28 @@ export class Alertas {
   arrayAlertas: Producto[] = []; //esto a lo mejor tendría que ir en constructr o ngoninit
   arrayVirgenes:Producto[] = []
   arrayFabricados: Producto[] = []
+  mensajeAlerta:string = 'La cantidad introducida es incorrecta, porque es superior a la que tenías que fabricar'
 
-  constructor(public servicio_localstorage:ServicioLocalstorage){
+  constructor(public servicio_localstorage:ServicioLocalstorage, public servicio_alertas:ServicioAlertas){
     this.arrayAlertas = this.servicio_localstorage.getArrayAlertas()
   }
-  
-  encuentraProductoVirgen(producto: Producto, c:any){
-    this.arrayVirgenes = this.servicio_localstorage.getArrayVirgenes()
-    const productoEncontrado = this.arrayVirgenes.find(p =>
-      p.tipo === producto.tipo &&
-      p.color === producto.color &&
-      p.talla === producto.talla
-    );
 
-    this.restarProducto(productoEncontrado!, producto, c);
-    this.servicio_localstorage.setArrayVirgenes(this.arrayVirgenes)  
-    this.encuentraProductoFabricado(producto, c)
-    producto.cantidad = c;
-    this.encuentraAlerta(producto, c)
+  encuentraProductoVirgen(producto: Producto, c:any){
+    if(producto.cantidad < c){
+      this.servicio_alertas.mostrarAlerta(this.mensajeAlerta);
+    }else{
+      this.arrayVirgenes = this.servicio_localstorage.getArrayVirgenes()
+      const productoEncontrado = this.arrayVirgenes.find(p =>
+        p.tipo === producto.tipo &&
+        p.color === producto.color &&
+        p.talla === producto.talla
+      );
+      this.restarProducto(productoEncontrado!, producto, c);
+      this.servicio_localstorage.setArrayVirgenes(this.arrayVirgenes)  
+      this.encuentraProductoFabricado(producto, c)
+      producto.cantidad = c;
+      this.encuentraAlerta(producto, c)
+    }
   }
 
   restarProducto(pEncontrado: Producto, pActual:Producto, cInput:number){
@@ -38,11 +43,8 @@ export class Alertas {
     pEncontrado.cantidad -= cantidad
 
   }
+
   encuentraAlerta(producto: Producto, c:any){
-    //    this.arrayAlertas = this.servicio_localstorage.getArrayAlertas()
-
-    /***COMPROBAR SI LA LINEA ANTERIOR ES REALMENTE NECESARIA, EN EL CONSTRUCTOR, YA SE HA OBTENIDO EL ARRAY ****/
-
     const productoEncontrado = this.arrayAlertas.find(p =>
       p.id === producto.id
     );

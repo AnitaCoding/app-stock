@@ -6,12 +6,12 @@ export class Producto {
   cantidad: number;
   modelo: string;
 
-constructor() {
-    this.id = 0;
-    this.tipo = '';
-    this.color = '';
-    this.talla = '';
-    this.cantidad = 0;
-    this.modelo = '';
+  constructor() {
+      this.id = 0;
+      this.modelo = '';
+      this.tipo = '';
+      this.color = '';
+      this.talla = '';
+      this.cantidad = 0;
   }
 }

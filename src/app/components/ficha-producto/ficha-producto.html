@@ -5,7 +5,6 @@
       <ion-card-header>
         <ion-card-title>{{productoActual.tipo}}</ion-card-title>
         <ion-card-subtitle>{{productoActual.modelo}}</ion-card-subtitle>
-
       </ion-card-header>
 
       <ion-card-content>
@@ -14,11 +13,17 @@
 
         <!--Aquí hay que poner un if. Si es solo consulta, esto NO puede ser un input-->
         <ion-input label="Stock" type="number" min="0" placeholder={{productoActual.cantidad}} fill="solid" [(ngModel)]="productoActual.cantidad"></ion-input>
-
+        @if (valorBotonHome === 'vender'){
+          <ion-select label="Lugar de venta" placeholder="Elige una opción">
+            <ion-select-option value="feria">Feria</ion-select-option>
+            <ion-select-option value="tienda">Tienda</ion-select-option>
+            <ion-select-option value="pedido">Pedido</ion-select-option>
+          </ion-select>
+        }
       </ion-card-content>
       <div class="card-buttons">
         <ion-button expand="block" (click)="guardarCambios()">Guardar</ion-button>
-        <ion-button expand="block" (click)="cancelarCambios('middle')">Cancelar</ion-button>
+        <ion-button expand="block" (click)="cancelarCambios()">Cancelar</ion-button>
         <ion-button expand="block" color="danger" (click)="eliminarProducto()">Eliminar</ion-button>
       </div>
     </ion-card>
@@ -41,7 +46,7 @@
         </ion-card-content>
         <div class="card-buttons">
           <ion-button expand="block" (click)="guardarCambios()">Guardar</ion-button>
-          <ion-button expand="block" (click)="cancelarCambios('middle')">Cancelar</ion-button>
+          <ion-button expand="block" (click)="cancelarCambios()">Cancelar</ion-button>
           <ion-button expand="block" color="danger" (click)="eliminarProducto()">Eliminar</ion-button>
         </div>
         

@@ -7,10 +7,10 @@
             <ion-button>
                 <ion-icon slot="icon-only" name="logo-euro"></ion-icon>
             </ion-button>
-            <ion-button><!--Este icono no lo enlazo con búsqueda porque sin valorbotonhome se rompe-->
+            <ion-button [routerLink]="['/selector-listas-ventas']">
                 <ion-icon slot="icon-only" name="storefront"></ion-icon>
             </ion-button>
-            <ion-button>
+            <ion-button [routerLink]="['/estadisticas']">
                 <ion-icon slot="icon-only" name="stats-chart"></ion-icon>
             </ion-button>
         </ion-buttons>

@@ -62,25 +62,17 @@
                 <ion-card [routerLink]="paginaFinal" (click)="comunicarDatos(p.id, p.tipo, p.color, p.talla, p.cantidad, p.modelo)">
                     <ion-card-header>
                         <ion-card-title>{{ p.tipo }}</ion-card-title>
-                        <ion-card-subtitle>{{ p.modelo }}</ion-card-subtitle>
+                        @if(p.modelo){<ion-card-subtitle>{{ p.modelo }}</ion-card-subtitle>}
+
                     </ion-card-header>
-
-                <!--Si entramos en vender o fabricar, nos muestra también el modelo y el color-->
-
-                    @if(valorBotonHome === 'vender' || valorBotonHome === 'fabricar'){
-                    
                     <ion-card-content>
-                        <p></p>
                         @if (p.color){<p>Color: {{ p.color }}</p>}
                         @if (p.talla){<p>Talla: {{ p.talla }}</p>}
-                    </ion-card-content>
-                    }
+                    </ion-card-content>                
                 </ion-card>       
             }
         </ion-list>
         }
-
-<!--Estaría bien añadir una X por si quiero eliminar el término de búsqueda entero-->
         
     </div>
 

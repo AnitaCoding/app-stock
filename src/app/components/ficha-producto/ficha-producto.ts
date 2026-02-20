@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonInput, AlertController, ToastController, IonContent, IonCardSubtitle } from '@ionic/angular/standalone';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonInput, AlertController, ToastController, IonContent, IonCardSubtitle, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
 import { ComunicarDatos } from '../../services/comunicar-datos';
 import { Producto } from '../../models/producto';
 import { ComunicarArrayProductos } from '../../services/comunicar-array-productos';
 import { FormsModule } from '@angular/forms';
 import { trash } from 'ionicons/icons';
 import { ServicioLocalstorage } from '../../services/servicio-localstorage';
-//import { AlertController, ToastController } from '@ionic/angular';
+import { ServicioAlertas } from '../../services/servicio-alertas';
+import { ServicioToasts } from '../../services/servicio-toasts';
 
 @Component({
   selector: 'app-ficha-producto',
-  imports: [IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonButton, IonInput, FormsModule, IonContent, IonCardSubtitle],
+  imports: [IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonButton, IonInput, FormsModule, IonContent, IonCardSubtitle, IonSelectOption, IonSelect],
   templateUrl: './ficha-producto.html',
   styleUrl: './ficha-producto.css',
 })
@@ -21,15 +22,19 @@ export class FichaProducto {
   arrayVirgenes: Producto[] = [];
   arrayAlertas:Producto[] = [];
 
+  mensajeVender = 'Si estás vendiendo este producto, no puede aumentar el stock :(';
+  mensajeComprarFabricar = 'Si estás fabricando o comprando este producto, no puede disminuir el stock :('
+  mensajeCambiosGuardados = 'Cambios guardados'
+  mensajeCambiosNoGuardados = 'Los cambios no se han guardado'
+
    constructor(
-    public servicio_comunicar_datos: ComunicarDatos, public servicio_comunicar_nombre_array:ComunicarArrayProductos,
-     private alertCtrl:AlertController, private toastController: ToastController, public servicio_localstorage:ServicioLocalstorage){
+    public servicio_comunicar_datos: ComunicarDatos, public servicio_comunicar_nombre_array:ComunicarArrayProductos, 
+    public servicio_alertas:ServicioAlertas, public servicio_toasts:ServicioToasts, public servicio_localstorage:ServicioLocalstorage){
 
       this.productoActual = this.servicio_comunicar_datos.productoActual;
 
    }
 
-   //este código se repite en varios componentes, valorar gestionarlo con un servicio
     valorBotonHome = localStorage.getItem('valorBotonHome');
 
    //Para guardar cambio, primero buscamos por id el producto en el array que sea
@@ -47,11 +52,11 @@ export class FichaProducto {
         cantidad = this.arrayActual[i].cantidad;
         this.arrayActual[i].cantidad = this.productoActual.cantidad;
         this.setArrayModificado();
-        this.mostrarToast('middle');
+        this.servicio_toasts.mostrarToast(this.mensajeCambiosGuardados);
         this.incluirAlerta(cantidad);
 
       }else if(this.valorBotonHome==='vender' && this.arrayActual[i].cantidad < this.productoActual.cantidad){
-        this.mostrarAlerta();
+        this.servicio_alertas.mostrarAlerta(this.mensajeVender);
         this.productoActual.cantidad = this.arrayActual[i].cantidad;
 
       } else if(this.valorBotonHome==='fabricar' || this.valorBotonHome==='comprar' && this.arrayActual[i].cantidad < this.productoActual.cantidad){
@@ -59,7 +64,7 @@ export class FichaProducto {
         cantidad = this.arrayActual[i].cantidad;
         this.arrayActual[i].cantidad = this.productoActual.cantidad;
         this.setArrayModificado();
-        this.mostrarToast('middle');
+        this.servicio_toasts.mostrarToast(this.mensajeCambiosGuardados);
 
         if(this.valorBotonHome === 'fabricar'){
                 this.buscarProductoVirgen(cantidad);
@@ -67,7 +72,7 @@ export class FichaProducto {
 
       }else if(this.valorBotonHome==='fabricar'||this.valorBotonHome==='comprar' && this.arrayActual[i].cantidad > this.productoActual.cantidad ){
         
-        this.mostrarAlerta();
+        this.servicio_alertas.mostrarAlerta(this.mensajeComprarFabricar);
         this.productoActual.cantidad = this.arrayActual[i].cantidad;
         
       }
@@ -102,11 +107,11 @@ export class FichaProducto {
         cantidad: 0
       };
       
-      this.arrayAlertas.push(producto);
-    }
-    console.log(this.arrayAlertas);
-    this.restarVendido(c, producto);
-    this.servicio_localstorage.setArrayAlertas(this.arrayAlertas)
+      this.arrayAlertas.push(producto);    
+  }
+      this.restarVendido(c, producto);    
+      this.servicio_localstorage.setArrayAlertas(this.arrayAlertas)
+    
   }
 
   restarVendido(c:number, p:Producto){
@@ -129,42 +134,8 @@ export class FichaProducto {
     let cantidadFabricada = this.productoActual.cantidad-c;
     p.cantidad -= cantidadFabricada;
   }
-
-  async mostrarAlerta() {
-    const mensajeVender = 'Si estás vendiendo este producto, no puede aumentar el stock :(';
-    const mensajeComprarFabricar = 'Si estás fabricando o comprando este producto, no puede disminuir el stock :('
-    if(this.valorBotonHome==='vender'){
-      const alert = await this.alertCtrl.create({
-        header: 'Error',
-        message: mensajeVender,
-        buttons: ['Ok'],
-      });
-
-    await alert.present();
-      
-    }else{      
-      const alert = await this.alertCtrl.create({
-        header: 'Error',
-        message: mensajeComprarFabricar,
-        buttons: ['Ok'],
-      });
-
-      await alert.present();
-    }
-  }
-
-  async mostrarToast(position: "top" | "bottom" | "middle" | undefined){
-       
-    const toast = await this.toastController.create({
-      message: 'Cambios guardados',
-      duration: 1500,
-      position: position,
-    });
-
-    await toast.present();
-  }
   
-  async cancelarCambios(position: "top" | "bottom" | "middle" | undefined){
+  cancelarCambios(){
     this.seleccionarArray();
     let i = 0;
 
@@ -172,14 +143,8 @@ export class FichaProducto {
 
     if(i!== -1){
       this.productoActual.cantidad = this.arrayActual[i].cantidad;
-      const toast = await this.toastController.create({
-        message: 'Los cambios no se han guardado',
-        duration: 1500,
-        position: position,
-      });
-      
-      await toast.present();
-      
+      this.servicio_toasts.mostrarToast(this.mensajeCambiosNoGuardados)
+     
     }
   }
 

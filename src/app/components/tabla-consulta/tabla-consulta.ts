@@ -16,11 +16,13 @@ export class TablaConsulta {
   arrayActual: Producto[] = [];
   productosFiltrados: Producto[] = [];
   propiedadesProducto: string[] = []
+  tallasOrdenadas: string[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
   constructor(public servicio_localstorage:ServicioLocalstorage){
     this.setArrayActual();
     this.buscarProductos();
     this.obtenerPropiedades();
+    this.ordenarProductos();
 
   }
 
@@ -37,6 +39,21 @@ export class TablaConsulta {
       producto => producto.tipo === this.categoria,
       )
   }
+
+  ordenarProductos(){
+  return this.productosFiltrados.sort((a, b) => {
+
+    if (a.modelo !== b.modelo) {
+      return a.modelo.localeCompare(b.modelo);
+    }
+
+    if (a.color !== b.color) {
+      return a.color.localeCompare(b.color);
+    }
+
+    return this.tallasOrdenadas.indexOf(a.talla) - this.tallasOrdenadas.indexOf(b.talla);
+  });
+}
 
   obtenerPropiedades(){
     this.propiedadesProducto = Object.keys(this.productosFiltrados[0])
